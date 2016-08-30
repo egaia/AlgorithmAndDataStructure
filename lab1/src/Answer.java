@@ -105,7 +105,7 @@ public class Answer {
     * @return maximal element.
     * @throws NoSuchElementException if <code> a </code> is empty.
     */
-   private static <T extends Object & Comparable<? super T>> T maximum(Collection<? extends T> a) throws NoSuchElementException {
+   static  <T extends Object & Comparable<? super T>> T maximum(Collection<? extends T> a) throws NoSuchElementException {
       if (!a.isEmpty()) {
          T maximum = null;
          for (T t : a){
@@ -122,7 +122,8 @@ public class Answer {
     * @param text text
     * @return number of words in the text
     */
-   private static int countWords(String text) {
+    static int countWords (String text) {
+
       return new StringTokenizer(text).countTokens();
    }
 
@@ -130,7 +131,7 @@ public class Answer {
     * @param s string
     * @return processed string
     */
-   private static String reverseCase (String s) {
+    static String reverseCase (String s) {
       StringBuilder stringBuffer = new StringBuilder();
       for (char letter : s.toCharArray()) {
          stringBuffer.append(Character.isUpperCase(letter) ? Character.toLowerCase(letter) : Character.toUpperCase(letter));
@@ -141,7 +142,7 @@ public class Answer {
    /** List reverse. Do not create a new list.
     * @param list list to reverse
     */
-   private static <T> void reverseList (List<T> list)
+    static <T> void reverseList (List<T> list)
       throws UnsupportedOperationException {
          if(!list.isEmpty()){
             Collections.reverse(list);
