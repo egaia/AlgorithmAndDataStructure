@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Comparison of sorting methods. The same array of non-negative int values is
@@ -80,11 +82,8 @@ public class IntSorting {
       }
    }
 
-   /**
-    * Insertion sort.
-    *
-    * @param a
-    *           array to be sorted
+   /** Insertion sort.
+    * @param a array to be sorted
     */
    public static void insertionSort(int[] a) {
       if (a.length < 2)
@@ -101,25 +100,29 @@ public class IntSorting {
       }
    }
 
-   /**
-    * Binary insertion sort.
-    *
-    * @param a
-    *           array to be sorted
+   /** Binary insertion sort.
+    * @param a array to be sorted
     */
    public static void binaryInsertionSort(int[] a) {
-      // TODO!!! Your method here!
+      for(int i = 1; i < a.length; i++){
+         int left = a[i];
+
+         //Find location to insert
+         int pos = Math.abs(Arrays.binarySearch(a, 0, i, left) + 1);
+
+         //Move array one place right from position to insert
+         System.arraycopy(a, pos, a, pos+1, i-pos);
+
+         //Placing element in correct position
+         a[pos] = left;
+      }
    }
 
    /**
     * Sort a part of the array using quicksort method.
-    *
-    * @param array
-    *           array to be changed
-    * @param l
-    *           starting index (included)
-    * @param r
-    *           ending index (excluded)
+    * @param array array to be changed
+    * @param l starting index (included)
+    * @param r ending index (excluded)
     */
    public static void quickSort (int[] array, int l, int r) {
       if (array == null || array.length < 1 || l < 0 || r <= l)
@@ -191,13 +194,9 @@ public class IntSorting {
       System.arraycopy(res, 0, keys, 0, keys.length);
    }
 
-   /**
-    * Check whether an array is ordered.
-    *
-    * @param a
-    *           sorted (?) array
-    * @throws IllegalArgumentException
-    *            if an array is not ordered
+   /** Check whether an array is ordered.
+    * @param a sorted (?) array
+    * @throws IllegalArgumentException if an array is not ordered
     */
    static void checkOrder(int[] a) {
       if (a.length < 2)
@@ -208,6 +207,4 @@ public class IntSorting {
                     "array not ordered: " + "a[" + i + "]=" + a[i] + " a[" + (i + 1) + "]=" + a[i + 1]);
       }
    }
-
 }
-
