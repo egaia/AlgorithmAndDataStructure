@@ -105,11 +105,15 @@ public class IntSorting {
     */
    public static void binaryInsertionSort(int[] a) {
       for(int i = 1; i < a.length; i++){
+         //the most left element of unsorted list
          int left = a[i];
 
          //Find location to insert
-         int pos = Math.abs(Arrays.binarySearch(a, 0, i, left) + 1);
+         //Math abs to avoid index out of bounds exception
+         //binarySearch(int[] a, int fromIndex, int toIndex, int key), gives out int to place! (+1 because java starting at 0)
+         int pos = Math.abs(Arrays.binarySearch(a, 0, i, left)+1);
 
+         //arraycopy(Object src, int srcPos, Object dest, int destPos, int length(how many elements to copy))
          //Move array one place right from position to insert
          System.arraycopy(a, pos, a, pos+1, i-pos);
 
