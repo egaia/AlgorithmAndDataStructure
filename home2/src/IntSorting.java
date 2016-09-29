@@ -18,6 +18,9 @@ public class IntSorting {
    /** number of competition rounds */
    static final int NUMBER_OF_ROUNDS = 4;
 
+
+   static int[] test = new int[]{2,2,2,2};
+
    /**
     * Main method.
     *
@@ -31,6 +34,9 @@ public class IntSorting {
          origArray[i] = generator.nextInt(1000);
       }
       int rightLimit = MAX_SIZE / (int) Math.pow(2., NUMBER_OF_ROUNDS);
+
+
+      binaryInsertionSort(test);
 
       // Start a competition
       for (int round = 0; round < NUMBER_OF_ROUNDS; round++) {
