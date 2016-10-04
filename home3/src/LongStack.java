@@ -1,14 +1,14 @@
 import java.util.LinkedList;
 
 public class LongStack {
-   protected LinkedList<Long> stack;
+   private LinkedList<Long> stack;
 
    LongStack() {
       stack = new LinkedList<>();
    }
 
    public static void main(String[] args) {
-      Long x = interpret("1 -10 4 8 3 - + * +");
+      Long x = interpret("2 -");
       System.out.println(x);
    }
    /**
@@ -128,8 +128,8 @@ public class LongStack {
     * @return the value of RPN.
     */
    public static long interpret (String pol) {
-      if(pol == null | pol.length() == 0 | pol == ""){
-         throw new RuntimeException("Expression can't be empty");
+      if(pol == null | pol.trim().length() == 0 | pol == ""){
+         throw new RuntimeException("Expression can't be empty" );
       }
       LongStack longStack = new LongStack();
       String[] elements = pol.trim().split("\\s+");
@@ -141,13 +141,13 @@ public class LongStack {
             i++;
          }catch(NumberFormatException e){
             if(longStack.stEmpty()){
-               throw new RuntimeException("Operation can't be first element of expression");
+               throw new RuntimeException("Operation can't be first element of expression " + pol);
             }
             else if(longStack.stack.size() < 2){
-               throw new RuntimeException("Too few elements in stack");
+               throw new RuntimeException("You entered too few elements. You entered(" + longStack.stack.size() +") " + pol);
             }
             else if(!element.equals("+") && !element.equals("*") && !element.equals("/") && !element.equals("-")){
-               throw new RuntimeException("Expression contains illegal symbol " + element +"." );
+               throw new RuntimeException("Expression contains illegal symbol " + element +"." + pol);
             }
             longStack.op(element);
             o++;
@@ -155,7 +155,7 @@ public class LongStack {
       }
 
       if(i-1 != o){
-         throw new RuntimeException("Stack is out of balance (integers: " + i + " , operations: " + o+").");
+         throw new RuntimeException("Stack is out of balance (integers: " + i + " , operations: " + o+").  " + pol);
       }
       return longStack.pop();
    }

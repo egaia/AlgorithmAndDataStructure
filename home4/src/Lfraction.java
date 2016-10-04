@@ -70,7 +70,7 @@ public class Lfraction implements Comparable<Lfraction> {
    public boolean equals (Object m) {
       Pair<Long, Long> eq1 = asFraction(this.numerator, this.denominator);
       Pair<Long, Long> eq2 = asFraction(((Lfraction) m).numerator, ((Lfraction) m).denominator);
-      if(eq1.getFirst() == eq2.getFirst() && eq1.getSecond() == eq2.getSecond()){
+      if(eq1.t.equals(eq2.t) && eq1.u.equals(eq2.u)){
          return true;
       }else{
          return false;
@@ -82,8 +82,7 @@ public class Lfraction implements Comparable<Lfraction> {
     */
    @Override
    public int hashCode() {
-      int hash = (int) (this.numerator+this.denominator);
-      return hash;
+      return Objects.hash(this.numerator, this.denominator);
    }
 
    /** Sum of fractions.
@@ -91,8 +90,13 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return this+m
     */
    public Lfraction plus (Lfraction m) {
-       // TODO!!!
-      return m;
+      long oneDenominator = this.denominator * m.denominator;
+      long firstExp = oneDenominator / this.denominator;
+      long secondExp = oneDenominator / m.denominator;
+      long oneNumerator = firstExp*this.numerator + secondExp*m.numerator;
+      Pair<Long, Long> gcm = asFraction(oneNumerator, oneDenominator);
+      Lfraction frac = new Lfraction(gcm.t,gcm.u);
+      return frac;
    }
 
    /** Multiplication of fractions.
@@ -100,26 +104,21 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return this*m
     */
    public Lfraction times (Lfraction m) {
-      return null; // TODO!!!
+      long oneDenominator = this.denominator*m.denominator;
+      long oneNumerator = this.numerator*m.numerator;
+      Pair<Long, Long> gcm = asFraction(oneNumerator, oneDenominator);
+      Lfraction frac = new Lfraction(gcm.t,gcm.u);
+      return frac;
    }
 
    /** Inverse of the fraction. n/d becomes d/n.
     * @return inverse of this fraction: 1/this
     */
    public Lfraction inverse() {
-      Long n = this.numerator;
-      Long d = this.denominator;
-      this.numerator = d;
-      this.denominator = n;
-      if(this.denominator == 0L){
-         throw new RuntimeException("Zero Inverse will not go!");
-      }else if(this.denominator < 0L){
-         this.denominator = this.denominator * -1;
-         this.numerator = this. numerator * -1;
-         return this;
-      }
-      else{
-         return this;
+      if(this.denominator.equals(0L)){
+         throw new RuntimeException("Zero denominator will not pass!");
+      }else{
+         return new Lfraction(this.denominator, this.numerator);
       }
    }
 
@@ -127,8 +126,10 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return opposite of this fraction: -this
     */
    public Lfraction opposite() {
-      this.numerator = this.numerator*-1;
-      return this;
+      if(this.denominator.equals(0L)){
+         throw new RuntimeException("Denominator can't be 0");
+      }
+      return new Lfraction(-this.numerator, this.denominator);
    }
 
    /** Difference of fractions.
@@ -136,7 +137,13 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return this-m
     */
    public Lfraction minus (Lfraction m) {
-      return null; // TODO!!!
+      long oneDenominator = this.denominator * m.denominator;
+      long firstExp = oneDenominator / this.denominator;
+      long secondExp = oneDenominator / m.denominator;
+      long oneNumerator = firstExp*this.numerator - secondExp*m.numerator;
+      Pair<Long, Long> gcm = asFraction(oneNumerator, oneDenominator);
+      Lfraction frac = new Lfraction(gcm.t,gcm.u);
+      return frac;
    }
 
    /** Quotient of fractions.
@@ -147,7 +154,8 @@ public class Lfraction implements Comparable<Lfraction> {
       if(m.numerator == 0L){
          throw new RuntimeException("Division by zero");
       }
-      return null;
+
+      return this.times(new Lfraction(m.denominator, m.numerator));
    }
 
    /** Comparision of fractions.
@@ -156,10 +164,15 @@ public class Lfraction implements Comparable<Lfraction> {
     */
    @Override
    public int compareTo (Lfraction m) {
-      if(this.numerator.compareTo(m.numerator) == 0 && this.denominator.compareTo(m.denominator) == 0) {
-         return 0;
+      long thi = this.numerator * m.denominator;
+      long fra = m.numerator * this.denominator;
+      int result = 0;
+      if(thi > fra){
+         result = 1;
+      }else if(fra > thi){
+         result = -1;
       }
-      return 3;
+      return result;
    }
 
    /** Clone of the fraction.
@@ -199,7 +212,24 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return fraction part of this fraction
     */
    public Lfraction fractionPart() {
-      return null; // TODO!!!
+      boolean isNeg = false;
+      if(this.numerator < 0){
+         isNeg = true;
+         this.numerator = this.numerator * (-1);
+      }
+      Long a = this.numerator;
+      Long b = this.denominator;
+      while(this.numerator > this.denominator){
+         a = a - b;
+         this.numerator =a;
+      }
+      if(this.numerator.equals(this.denominator)){
+         return new Lfraction(0, 1);
+      }
+      if(isNeg){
+         this.numerator = this.numerator*-1;
+      }
+      return new Lfraction(this.numerator, this.denominator);
    }
 
    /** Approximate value of the fraction.
@@ -217,7 +247,11 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return f as an approximate fraction of form nd
     */
    public static Lfraction toLfraction (double f, long d) {
-      return null; // TODO!!!
+      if (d > 0) {
+         return new Lfraction((Math.round(f * d)), d);
+      }else{
+         throw  new RuntimeException("Illegal denominator");
+      }
    }
 
    /** Conversion from string to the fraction. Accepts strings of form
@@ -233,6 +267,11 @@ public class Lfraction implements Comparable<Lfraction> {
    }
 }
 
+/**
+ * Custom class Pair which takes in two objects f.e. Pair<Long, Long>
+ * @param <T> First object
+ * @param <U> Second object
+ */
 class Pair<T, U> {
    public final T t;
    public final U u;
@@ -240,14 +279,6 @@ class Pair<T, U> {
    Pair(T t, U u) {
       this.t= t;
       this.u= u;
-   }
-
-   public T getFirst(){
-      return t;
-   }
-
-   public U getSecond(){
-      return u;
    }
 }
 
