@@ -2,6 +2,7 @@ import java.util.LinkedList;
 
 public class LongStack {
    protected LinkedList<Long> stack;
+
    LongStack() {
       stack = new LinkedList<>();
    }
