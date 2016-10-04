@@ -43,7 +43,7 @@ public class Lfraction implements Comparable<Lfraction> {
     */
    @Override
    public String toString() {
-      return null; // TODO!!!
+      return this.numerator + "/" + this.denominator;
    }
 
    /** Equality test.
@@ -84,14 +84,28 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return inverse of this fraction: 1/this
     */
    public Lfraction inverse() {
-      return null; // TODO!!!
+      Long n = this.numerator;
+      Long d = this.denominator;
+      this.numerator = d;
+      this.denominator = n;
+      if(this.denominator == 0L){
+         throw new RuntimeException("Zero Inverse will not go!");
+      }else if(this.denominator < 0L){
+         this.denominator = this.denominator * -1;
+         this.numerator = this. numerator * -1;
+         return this;
+      }
+      else{
+         return this;
+      }
    }
 
    /** Opposite of the fraction. n/d becomes -n/d.
     * @return opposite of this fraction: -this
     */
    public Lfraction opposite() {
-      return null; // TODO!!!
+      this.numerator = this.numerator*-1;
+      return this;
    }
 
    /** Difference of fractions.
@@ -107,7 +121,10 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return this/m
     */
    public Lfraction divideBy (Lfraction m) {
-      return null; // TODO!!!
+      if(m.numerator == 0L){
+         throw new RuntimeException("Division by zero");
+      }
+      return null;
    }
 
    /** Comparision of fractions.
@@ -116,7 +133,10 @@ public class Lfraction implements Comparable<Lfraction> {
     */
    @Override
    public int compareTo (Lfraction m) {
-      return 0; // TODO!!!
+      if(this.numerator.compareTo(m.numerator) == 0 && this.denominator.compareTo(m.denominator) == 0) {
+         return 0;
+      }
+      return 3;
    }
 
    /** Clone of the fraction.
@@ -124,7 +144,7 @@ public class Lfraction implements Comparable<Lfraction> {
     */
    @Override
    public Object clone() throws CloneNotSupportedException {
-      return null; // TODO!!!
+      return new Lfraction(this.numerator, this.denominator);
    }
 
    /** Integer part of the (improper) fraction. 
@@ -146,13 +166,15 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return numeric value of this fraction
     */
    public double toDouble() {
-      return 0.; // TODO!!!
+      double a = this.numerator;
+      double b = this.denominator;
+      return a/b;
    }
 
    /** Double value f presented as a fraction with denominator d > 0.
     * @param f real number
     * @param d positive denominator for the result
-    * @return f as an approximate fraction of form n/d
+    * @return f as an approximate fraction of form nd
     */
    public static Lfraction toLfraction (double f, long d) {
       return null; // TODO!!!
@@ -164,7 +186,10 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return fraction represented by s
     */
    public static Lfraction valueOf (String s) {
-      return null; // TODO!!!
+      String[] splits = s.split("/");
+      Long numerator = Long.parseLong(splits[0]);
+      Long denominator = Long.parseLong(splits[1]);
+      return new Lfraction(numerator, denominator);
    }
 }
 
