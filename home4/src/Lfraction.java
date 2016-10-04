@@ -46,13 +46,35 @@ public class Lfraction implements Comparable<Lfraction> {
       return this.numerator + "/" + this.denominator;
    }
 
+   /**
+    * The greatest common denominator
+    * @param numerator numerator part of fraction
+    * @param denominator denominator part of fraction
+    * @return the greatest common denominator
+    */
+   public static long gcm(long numerator, long denominator) {
+      return denominator == 0 ? numerator : gcm(denominator, numerator % denominator); // Not bad for one line of code :)
+   }
+
+   public Pair<Long, Long> asFraction(long a, long b) {
+      long gcm = gcm(a, b);
+      Pair<Long,Long> ret = new Pair<>(a / gcm, b / gcm);
+      return ret;
+   }
+
    /** Equality test.
     * @param m second fraction
     * @return true if fractions this and m are equal
     */
    @Override
    public boolean equals (Object m) {
-      return true; //TODO!!!
+      Pair<Long, Long> eq1 = asFraction(this.numerator, this.denominator);
+      Pair<Long, Long> eq2 = asFraction(((Lfraction) m).numerator, ((Lfraction) m).denominator);
+      if(eq1.getFirst() == eq2.getFirst() && eq1.getSecond() == eq2.getSecond()){
+         return true;
+      }else{
+         return false;
+      }
    }
 
    /** Hashcode has to be equal for equal fractions.
@@ -60,7 +82,8 @@ public class Lfraction implements Comparable<Lfraction> {
     */
    @Override
    public int hashCode() {
-      return 0; // TODO!!!
+      int hash = (int) (this.numerator+this.denominator);
+      return hash;
    }
 
    /** Sum of fractions.
@@ -151,7 +174,24 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return integer part of this fraction
     */
    public long integerPart() {
-      return 0L; // TODO!!!
+      boolean isNull = false;
+      if(this.numerator < 0){
+         isNull = true;
+         this.numerator = this.numerator * (-1);
+      }
+      Long a = this.numerator;
+      Long b = this.denominator;
+      int i = 0;
+      while(this.numerator>=this.denominator){
+         a = a - b;
+         this.numerator = a;
+         i = i + 1;
+      }
+      if(isNull){
+         return i*-1;
+      }else{
+         return i;
+      }
    }
 
    /** Extract fraction part of the (improper) fraction
@@ -190,6 +230,24 @@ public class Lfraction implements Comparable<Lfraction> {
       Long numerator = Long.parseLong(splits[0]);
       Long denominator = Long.parseLong(splits[1]);
       return new Lfraction(numerator, denominator);
+   }
+}
+
+class Pair<T, U> {
+   public final T t;
+   public final U u;
+
+   Pair(T t, U u) {
+      this.t= t;
+      this.u= u;
+   }
+
+   public T getFirst(){
+      return t;
+   }
+
+   public U getSecond(){
+      return u;
    }
 }
 
