@@ -5,8 +5,8 @@ import java.util.*;
  */
 public class Lfraction implements Comparable<Lfraction> {
 
-   private Long numerator;
-   private Long denominator;
+   private long numerator;
+   private long denominator;
 
    /** Constructor.
     * @param numerator numerator
@@ -53,7 +53,7 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return the greatest common denominator
     */
    public static long gcm(long numerator, long denominator) {
-      return denominator == 0 ? numerator : gcm(denominator, numerator % denominator); // Not bad for one line of code :)
+      return denominator == 0 ? numerator : gcm(denominator, numerator % denominator);
    }
 
    public Pair<Long, Long> asFraction(long a, long b) {
@@ -104,6 +104,9 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return this*m
     */
    public Lfraction times (Lfraction m) {
+      if((this.denominator == 0) || (m.denominator == 0)){
+         throw new IllegalArgumentException("Denominator can't be zero.");
+      }
       long oneDenominator = this.denominator*m.denominator;
       long oneNumerator = this.numerator*m.numerator;
       Pair<Long, Long> gcm = asFraction(oneNumerator, oneDenominator);
@@ -115,7 +118,7 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return inverse of this fraction: 1/this
     */
    public Lfraction inverse() {
-      if(this.denominator.equals(0L)){
+      if(this.denominator == 0L){
          throw new RuntimeException("Zero denominator will not pass!");
       }else{
          return new Lfraction(this.denominator, this.numerator);
@@ -126,7 +129,7 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return opposite of this fraction: -this
     */
    public Lfraction opposite() {
-      if(this.denominator.equals(0L)){
+      if(this.denominator == 0L){
          throw new RuntimeException("Denominator can't be 0");
       }
       return new Lfraction(-this.numerator, this.denominator);
@@ -154,7 +157,6 @@ public class Lfraction implements Comparable<Lfraction> {
       if(m.numerator == 0L){
          throw new RuntimeException("Division by zero");
       }
-
       return this.times(new Lfraction(m.denominator, m.numerator));
    }
 
@@ -223,7 +225,7 @@ public class Lfraction implements Comparable<Lfraction> {
          a = a - b;
          this.numerator =a;
       }
-      if(this.numerator.equals(this.denominator)){
+      if(this.numerator ==this.denominator){
          return new Lfraction(0, 1);
       }
       if(isNeg){
@@ -260,9 +262,25 @@ public class Lfraction implements Comparable<Lfraction> {
     * @return fraction represented by s
     */
    public static Lfraction valueOf (String s) {
-      String[] splits = s.split("/");
-      Long numerator = Long.parseLong(splits[0]);
-      Long denominator = Long.parseLong(splits[1]);
+
+      String[] splits;
+      long numerator;
+      long denominator;
+      try{
+         splits = s.split("/");
+      }catch(Exception e){
+         throw new IllegalArgumentException(s + " is not a fraction");
+      }
+      try{
+         numerator = Long.parseLong(splits[0]);
+      }catch(Exception e){
+         throw new IllegalArgumentException(splits[0] + " is not correct value for numerator");
+      }
+      try{
+         denominator = Long.parseLong(splits[1]);
+      }catch(Exception e){
+         throw new IllegalArgumentException(splits[1] + " is not correct value for denumerator");
+      }
       return new Lfraction(numerator, denominator);
    }
 }
