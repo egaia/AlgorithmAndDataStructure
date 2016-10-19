@@ -1,22 +1,24 @@
-
 import java.util.*;
 
 public class Node {
+
 
    private String name;
    private Node firstChild;
    private Node nextSibling;
 
    Node (String n, Node d, Node r) {
-      // TODO!!! Your constructor here
+      this.name = n;
+      this.firstChild = d;
+      this.nextSibling = r;
    }
    
    public static Node parsePostfix (String s) {
-      return null;  // TODO!!! return the root
+      return null;
    }
 
    public String leftParentheticRepresentation() {
-      return ""; // TODO!!! return the string without spaces
+      return "";
    }
 
    public static void main (String[] param) {
