@@ -2,32 +2,46 @@ import java.util.*;
 
 public class Node {
 
-
    private String name;
    private Node firstChild;
    private Node nextSibling;
+
 
    Node (String n, Node d, Node r) {
       this.name = n;
       this.firstChild = d;
       this.nextSibling = r;
    }
+
+   Node (){
+
+   }
+
    
    public static Node parsePostfix (String s) {
       checkForBasicErrors(s);
+      Stack<Node> stack = new Stack<>();
+      Node newNode = new Node();
       StringTokenizer st = new StringTokenizer(s, "(),", true);
       while(st.hasMoreTokens()){
          String token = st.nextToken().trim();
-         if(token.equals('(')){
-            //samm alla
-         }else if( token.equals(')')){
-            // samm üles
-
-         }else if(token.equals(',')){
-            //samal tasemel samm paremale
+         if(token.equals("(")){
+            stack.push(newNode);
+            newNode.firstChild = new Node();
+            newNode = newNode.firstChild;
+         }else if( token.equals(")")){
+            Node node = stack.pop();
+            newNode = node;
+         }else if(token.equals(",")){
+            if(stack.empty())
+               throw new RuntimeException("Comma exception" + s);
+            newNode.nextSibling = new Node();
+            newNode = newNode.nextSibling;
+         }else{
+            newNode.name = token;
          }
       }
-      return null;
+      return newNode;
    }
 
    public String leftParentheticRepresentation() {
@@ -42,7 +56,6 @@ public class Node {
          str.append(",");
          str.append(this.nextSibling.leftParentheticRepresentation());
       }
-
       return str.toString();
    }
 
@@ -57,10 +70,14 @@ public class Node {
          throw new RuntimeException("String contains double commas " + s);
       if(s.contains("()"))
          throw new RuntimeException("String contains empty subtree " + s);
-      if(s.contains("(("))
-         throw new RuntimeException("String contains double brackets " + s);
-      if(s.contains(",") && !s.contains("(") || !s.contains(")"))
-         throw new RuntimeException("String does not contain brackets " + s);
+      if(s.contains(",") && !s.contains("(") && !s.contains(")"))
+         throw new RuntimeException("String contains double root nodes " + s);
+      for(int i = 0; i < s.length(); i++){
+         if(s.charAt(i) == '(' && s.charAt(i+1) == ',')
+            throw new RuntimeException("String containts comma error, parenthesis can't be followed by comma " +s);
+         if(s.charAt(i) == ')' && (s.charAt(i+1) == ',' || s.charAt(i+1) == ')'))
+            throw new RuntimeException("Double rightbracket error " +s);
+      }
    }
    public static void main (String[] param) {
       String s = "(B1,C)A";
