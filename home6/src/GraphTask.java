@@ -14,7 +14,7 @@ public class GraphTask {
    /** Actual main method to run examples and everything. */
    public void run() {
       Graph g = new Graph ("G");
-      g.createRandomSimpleGraph (7, 11);
+      g.createRandomSimpleGraph (5, 7);
       System.out.println (g);
 
       Graph nG = g.clone();
@@ -238,22 +238,93 @@ public class GraphTask {
          return allVertexes;
       }
 
+      public Vertex getVertexByName(String name){
+         List<Vertex> allVertexes = getAllVertexes();
+         for(Vertex v : allVertexes){
+            if(v.id.equals(name)){
+               return v;
+            }
+         }
+         return null;
+      }
+
       @Override
       public Graph clone(){
          Graph newGraph = new Graph("Gclone");
+
+         //Clone first Vertex
          List<Vertex> oVertexes = getAllVertexes();
          Vertex first = oVertexes.get(0);
          oVertexes.remove(first);
          Vertex nfVertex = new Vertex(first.id);
          newGraph.first = nfVertex;
 
+         //Add pointer to the first Vertex of graph
          Vertex pointer = newGraph.first;
 
+         //Add other Vertexes for graph
          for (Vertex v : oVertexes){
             Vertex nV = new Vertex(v.id);
             pointer.next = nV;
             pointer = pointer.next;
          }
+
+         //Take first vertex from graph to be cloned
+         List<Vertex> allRealVertexes = getAllVertexes();
+         Vertex firstRealVertex = allRealVertexes.get(0);
+         allRealVertexes.remove(allRealVertexes);
+
+         //Take first vertex from cloned graph
+         Vertex firstCloneVertex = newGraph.first;
+
+         //Create first arc with its target to the cloned graph
+         firstCloneVertex.first = new Arc(firstRealVertex.first.id);
+         Vertex target = newGraph.getVertexByName(firstRealVertex.first.target.id);
+         firstCloneVertex.first.target = target;
+
+         //Move pointers
+         Arc firstCloneArc = firstCloneVertex.first;
+         Arc firstRealArc = firstRealVertex.first;
+
+         //Add other arcs to the first vertex
+         while(firstRealArc.next != null){
+            firstCloneArc.next = new Arc(firstRealArc.next.id);
+            Vertex nTarget = newGraph.getVertexByName(firstRealArc.next.target.id);
+            firstCloneArc.next.target = nTarget;
+            firstCloneArc = firstCloneArc.next;
+            firstRealArc = firstRealArc.next;
+         }
+
+         //Rewrite cloned graph first vertex
+         newGraph.first = firstCloneVertex;
+
+         //Move pointer to the next Vertex
+         pointer = newGraph.first;
+
+         for(Vertex v : allRealVertexes){
+
+            pointer.first = new Arc(v.first.id);
+            Vertex newTarget = newGraph.getVertexByName(v.first.target.id);
+            pointer.first.target = newTarget;
+
+            //ArcPointers
+            Arc fCloneArc = pointer.first;
+            Arc rCloneArc = v.first;
+
+            while(rCloneArc.next != null){
+               fCloneArc.next = new Arc(rCloneArc.next.id);
+               Vertex nTarget = newGraph.getVertexByName(rCloneArc.next.target.id);
+               fCloneArc.next.target = nTarget;
+               fCloneArc = fCloneArc.next;
+               rCloneArc = rCloneArc.next;
+            }
+            if(pointer.next == null)
+               continue;
+            pointer = pointer.next;
+         }
+
+
+
          return newGraph;
       }
    }
