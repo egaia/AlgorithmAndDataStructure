@@ -14,15 +14,15 @@ public class GraphTask {
    /** Actual main method to run examples and everything. */
    public void run() {
       Graph g = new Graph ("G");
-      g.createRandomSimpleGraph (5, 7);
+      g.createRandomSimpleGraph (5, 9);
       System.out.println (g);
 
       Graph nG = g.clone();
       System.out.println(nG);
 
+
    }
 
-   // TODO!!! add javadoc relevant to your problem
    class Vertex {
 
       private String id;
@@ -74,8 +74,6 @@ public class GraphTask {
       public String toString() {
          return id;
       }
-
-      // TODO!!! Your Arc methods here!
    } 
 
 
@@ -227,6 +225,11 @@ public class GraphTask {
          }
       }
 
+
+      /**
+       * Get all the vertixes for current graph.
+       * @return List of graph's Vertixes
+       */
       public List<Vertex> getAllVertexes(){
          List<Vertex> allVertexes = new ArrayList<>();
          Vertex currVertex = this.first;
@@ -238,6 +241,11 @@ public class GraphTask {
          return allVertexes;
       }
 
+      /**
+       * Returns Vertex by its name
+       * @param name the id of Vertex
+       * @return Vertex if one is found else null.
+       */
       public Vertex getVertexByName(String name){
          List<Vertex> allVertexes = getAllVertexes();
          for(Vertex v : allVertexes){
@@ -248,6 +256,11 @@ public class GraphTask {
          return null;
       }
 
+      /**
+       * Overriding method for cloning a graph
+       * @return A cloned graph
+       * {@inheritDoc}
+       */
       @Override
       public Graph clone(){
          Graph newGraph = new Graph("Gclone");
@@ -301,6 +314,7 @@ public class GraphTask {
          //Move pointer to the next Vertex
          pointer = newGraph.first;
 
+         //deal with adding arcs to other vertexes
          for(Vertex v : allRealVertexes){
 
             pointer.first = new Arc(v.first.id);
@@ -311,15 +325,17 @@ public class GraphTask {
             Arc fCloneArc = pointer.first;
             Arc rCloneArc = v.first;
 
+            //Follow the arc tree and add new ones
             while(rCloneArc.next != null){
                fCloneArc.next = new Arc(rCloneArc.next.id);
                Vertex nTarget = newGraph.getVertexByName(rCloneArc.next.target.id);
                fCloneArc.next.target = nTarget;
+
+               //Move Arc pointers
                fCloneArc = fCloneArc.next;
                rCloneArc = rCloneArc.next;
             }
-            if(pointer.next == null)
-               continue;
+            //move pointer of Vertexes to the next one in the tree
             pointer = pointer.next;
          }
 
