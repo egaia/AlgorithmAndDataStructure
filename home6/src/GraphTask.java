@@ -20,6 +20,19 @@ public class GraphTask {
       Graph nG = g.clone();
       System.out.println(nG);
 
+      System.out.println("Adding new vertex and few arcs to the original graph");
+      g.createVertex("v7");
+      g.createArc("av7_v1", g.getVertexByName("v7"), g.getVertexByName("v1"));
+      g.createArc("av7_v4", g.getVertexByName("v7"), g.getVertexByName("v4"));
+      g.createArc("av7_v6", g.getVertexByName("v7"), g.getVertexByName("v6"));
+
+      System.out.println("Added new vertex with id 7 and 3 arcs v7->v1 ; v7->v4 ; v7->v6");
+
+      System.out.println("Printing G");
+      System.out.println(g);
+
+      System.out.println(nG);
+
 
    }
 
