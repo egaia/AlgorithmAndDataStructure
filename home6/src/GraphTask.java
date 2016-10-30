@@ -9,16 +9,17 @@ public class GraphTask {
    public static void main (String[] args) {
       GraphTask a = new GraphTask();
       a.run();
-      throw new RuntimeException ("Nothing implemented yet!"); // delete this
    }
 
    /** Actual main method to run examples and everything. */
    public void run() {
       Graph g = new Graph ("G");
-      g.createRandomSimpleGraph (6, 9);
+      g.createRandomSimpleGraph (7, 11);
       System.out.println (g);
 
-      // TODO!!! Your experiments here
+      Graph nG = g.clone();
+      System.out.println(nG);
+
    }
 
    // TODO!!! add javadoc relevant to your problem
@@ -45,7 +46,6 @@ public class GraphTask {
          return id;
       }
 
-      // TODO!!! Your Vertex methods here!
    }
 
 
@@ -227,8 +227,35 @@ public class GraphTask {
          }
       }
 
-      // TODO!!! Your Graph methods here! Probably your solution belongs here.
+      public List<Vertex> getAllVertexes(){
+         List<Vertex> allVertexes = new ArrayList<>();
+         Vertex currVertex = this.first;
+         allVertexes.add(currVertex);
+         while(currVertex.next != null){
+            allVertexes.add(currVertex.next);
+            currVertex = currVertex.next;
+         }
+         return allVertexes;
+      }
+
+      @Override
+      public Graph clone(){
+         Graph newGraph = new Graph("Gclone");
+         List<Vertex> oVertexes = getAllVertexes();
+         Vertex first = oVertexes.get(0);
+         oVertexes.remove(first);
+         Vertex nfVertex = new Vertex(first.id);
+         newGraph.first = nfVertex;
+
+         Vertex pointer = newGraph.first;
+
+         for (Vertex v : oVertexes){
+            Vertex nV = new Vertex(v.id);
+            pointer.next = nV;
+            pointer = pointer.next;
+         }
+         return newGraph;
+      }
    }
 
 } 
-
