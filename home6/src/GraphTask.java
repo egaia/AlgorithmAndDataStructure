@@ -13,27 +13,11 @@ public class GraphTask {
 
    /** Actual main method to run examples and everything. */
    public void run() {
-      Graph g = new Graph ("G");
-      g.createRandomSimpleGraph (6, 9);
-      System.out.println (g);
-
+      Graph g = new Graph ("nimi");
+      //g.createRandomSimpleGraph(6,9);
       Graph nG = g.clone();
-      System.out.println(nG);
-
-      System.out.println("Adding new vertex and few arcs to the original graph");
-      g.createVertex("v7");
-      g.createArc("av7_v1", g.getVertexByName("v7"), g.getVertexByName("v1"));
-      g.createArc("av7_v4", g.getVertexByName("v7"), g.getVertexByName("v4"));
-      g.createArc("av7_v6", g.getVertexByName("v7"), g.getVertexByName("v6"));
-
-      System.out.println("Added new vertex with id 7 and 3 arcs v7->v1 ; v7->v4 ; v7->v6");
-
-      System.out.println("Printing G");
       System.out.println(g);
-
       System.out.println(nG);
-
-
    }
 
    class Vertex {
@@ -104,6 +88,10 @@ public class GraphTask {
 
       Graph (String s) {
          this (s, null);
+      }
+
+      public void setId(String name){
+         this.id = name;
       }
 
       @Override
@@ -246,11 +234,16 @@ public class GraphTask {
          List<Vertex> allVertexes = new ArrayList<>();
          Vertex currVertex = this.first;
          allVertexes.add(currVertex);
-         while(currVertex.next != null){
-            allVertexes.add(currVertex.next);
-            currVertex = currVertex.next;
+         try {
+            while (currVertex.next != null) {
+               allVertexes.add(currVertex.next);
+               currVertex = currVertex.next;
+            }
+            return allVertexes;
+         }catch(Exception e){
+            throw new RuntimeException("You can't get vertexes from an empty graph, therefore you can't clone it as well.\n" +
+                  "Your graph was: " + this.toString());
          }
-         return allVertexes;
       }
 
       /**
@@ -275,7 +268,7 @@ public class GraphTask {
        */
       @Override
       public Graph clone(){
-         Graph newGraph = new Graph("Gclone");
+         Graph newGraph = new Graph(this.id + "_clone");
          //Clone first Vertex
          List<Vertex> oVertexes = getAllVertexes();
          Vertex first = oVertexes.get(0);
