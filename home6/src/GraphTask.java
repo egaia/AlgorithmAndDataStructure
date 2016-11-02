@@ -14,10 +14,12 @@ public class GraphTask {
    /** Actual main method to run examples and everything. */
    public void run() {
       Graph g = new Graph ("nimi");
-      //g.createRandomSimpleGraph(6,9);
+      g.createRandomSimpleGraph(2500,9200);
+      long stime = System.nanoTime();
       Graph nG = g.clone();
-      System.out.println(g);
-      System.out.println(nG);
+      long ftime = System.nanoTime();
+      long diff = ftime - stime;
+      System.out.printf("%34s%11d%n", "Clone time for graph with 2500 vertexes and 9200 arcs(ms): ", diff / 1000000);
    }
 
    class Vertex {
