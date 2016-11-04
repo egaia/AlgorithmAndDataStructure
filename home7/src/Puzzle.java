@@ -154,7 +154,7 @@ public class Puzzle {
     * Checks if letters that can't be 0, are not 0.
     * If combination is correct, it is stated as correct and it is printed out.
     */
-   public static void checkIfFits() {
+   private static void checkIfFits() {
       long[] values = new long[]{0, 0, 0};
 
       if (hashMap.get(noNulls[0]) == 0) {
