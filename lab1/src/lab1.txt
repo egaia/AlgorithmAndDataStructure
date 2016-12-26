@@ -1,3 +1,19 @@
+0.Järjestamismeetodid
+    Abstraktne keerukus, konkreetne keerukus (keskmine, halvim), mäluvajadus, algoritmi lihtsus, stabiilsus, ...
+    "Aeglased" meetodid: O(n2)
+        lihtne pistemeetod
+        mullimeetod
+        valikumeetod
+    "Kiired" meetodid: O(nlogn)
+        kahendpistemeetod
+        Shelli meetod
+        kiirmeetod (Hoare'i meetod)
+        kuhjameetod
+        ühildusmeetod
+    Erimeetodid (kitsendustega): O(n)
+        loendamismeetod
+        positsioonimeetod
+        kimbumeetod
 1.Algoritmi omadused. Algoritmide asümptootiline analüüs: relatsioonid "suur-O", "väike-o", teeta, "suur-oomega" ja "väike-oomega"; nende definitsioonid ning  põhiomadused.
     a) Algoritmi iseloomustamiseks kasutatakse järgmisi mõisteid:
         * Korrektsus (algoritm lahendab "õiget" ülesannet, tulemus vastab spetsifikatsioonile).
@@ -50,103 +66,187 @@
         return -1;
     } // otsi lopp
 3.Paisksalvestus, paisktabel (hash table).
-Hashing (paisksalvestus) - Elemendi asukoht massiivis leitakse rakendades võtmele hash funktsiooni.
-Mitme võtme sattumist samale kohale nimetatakse kokkupõrkeks. Kokkupõrke lahendamiseks on mitu meetodit
-    ? avatud adresseerimine (lingitud listiga)
-    ? rehash
-Hash otsingu keerukus - Halvimal juhul lineaarne otsing (O(n)) - Kõik elemendid on ühes lingitud listis.
-Parimal juhul konstantne otsing (O(1)) - Iga võti annab erineva hash väärtuse
-
-
-
+    Hashing (paisksalvestus) - Elemendi asukoht massiivis leitakse rakendades võtmele hash funktsiooni.
+    Mitme võtme sattumist samale kohale nimetatakse kokkupõrkeks. Kokkupõrke lahendamiseks on mitu meetodit
+        ? avatud adresseerimine (lingitud listiga)
+        ? rehash
+    Hash otsingu keerukus - Halvimal juhul lineaarne otsing (O(n)) - Kõik elemendid on ühes lingitud listis.
+    Parimal juhul konstantne otsing (O(1)) - Iga võti annab erineva hash väärtuse
 4.Järjestamine: pistemeetod (insertion sort) ja kiirmeetod (quicksort).
-Pistemeetod:
-Jada jagatakse "järjestatud osaks" (algselt tühi) ja "järjestamata osaks" (algselt kogu jada).
-Järjestatud osa pikkust suurendatakse järjekordse elemendi paigutamisega õigele kohale järjestatud osas.
+    Pistemeetod:
+        Jada jagatakse "järjestatud osaks" (algselt tühi) ja "järjestamata osaks" (algselt kogu jada).
+        Järjestatud osa pikkust suurendatakse järjekordse elemendi paigutamisega õigele kohale järjestatud osas.
 
-/**
-* Sorteerida pistemeetodil List, mille elemendid realiseerivad
-* liidest Comparable.
-* @param a sorteeritav list.
-*/
-static public void pisteSort (List a) {
-if (a.size() < 2) return;
-for (int i=1; i<a.size(); i++) {
-}
-Comparable b = (Comparable) a.remove (i);
-int j;
-for (j=0; j<i; j++) {
-if (b.compareTo ((Comparable)a.get (j)) < 0) break;
-}
-a.add (j, b); // pistame b kohale j
-}
-} // pisteSort() lopp
+        /**
+        * Sorteerida pistemeetodil List, mille elemendid realiseerivad
+        * liidest Comparable.
+        * @param a sorteeritav list.
+        */
+        static public void pisteSort (List a) {
+            if (a.size() < 2) return;
+            for (int i=1; i<a.size(); i++) {
+                Comparable b = (Comparable) a.remove (i);
+                int j;
+                for (j=0; j<i; j++) {
+                if (b.compareTo ((Comparable)a.get (j)) < 0) break;
+                }
+            a.add (j, b); // pistame b kohale j
+            }
+        } // pisteSort() lopp
 
-/**
-* Sorteerime massiivi, mille elemendid realiseerivad
-* liidest Comparable.
-* @param a sorteeritav massiiv.
-*/
-static public void pisteSort (Comparable[] a) {
-if (a.length < 2) return;
-for (int i=1; i<a.length; i++) {
-Comparable b = a[i];
-int j;
-for (j=i-1; j>=0; j--) {
-if (a[j].compareTo (b) <= 0) break;
-a[j+1] = a[j]; // vabastame pistekoha
-}
-a[j+1] = b; // pistame b kohale
-}
-} // pisteSort() lopp
+        /**
+        * Sorteerime massiivi, mille elemendid realiseerivad
+        * liidest Comparable.
+        * @param a sorteeritav massiiv.
+        */
+        static public void pisteSort (Comparable[] a) {
+            if (a.length < 2) return;
+            for (int i=1; i<a.length; i++) {
+                Comparable b = a[i];
+                int j;
+                for (j=i-1; j>=0; j--) {
+                    if (a[j].compareTo (b) <= 0) break;
+                    a[j+1] = a[j]; // vabastame pistekoha
+                }
+                a[j+1] = b; // pistame b kohale
+            }
+        } // pisteSort() lopp
 
-Kiirmeetod:
-(Osa)jada jagatakse kaheks lühemaks osajadaks nii, et ükski element esimeses osas ei oleks suurem ühestki elemendist teises osas. Siis võib kummagi osa sorteerida eraldi (nad on sõltumatud). "Jaga ja valitse"
-
-/**
-* Sorteerida massiiv kiirmeetodil.
-* @param massiiv sorteeritav massiiv.
-* @param l vasakpoolne otspunkt.
-* @param r parempoolne otspunkt.
-*/
-static public void sort (Comparable[] massiiv, int l, int r) {
-if (massiiv.length < 2) return;
-int i = l; int j = r;
-Comparable x = massiiv [(i+j) / 2];
-do {
-while (massiiv [i].compareTo (x) < 0) i++;
-while (x.compareTo (massiiv [j]) < 0) j--;
-if (i <= j) {
-Comparable tmp = massiiv [i];
-massiiv [i] = massiiv [j]; massiiv [j] = tmp;
-// selle koha peal on väljatrükk silumiseks: "veelahe" ja vahetatavad
-i++; j--;
-}
-} while (i < j);
-if (l < j) sort (massiiv, l, j); // rekursioon
-if (i < r) sort (massiiv, i, r); // rekursioon
-} // sort() lopp
-
-
+    Kiirmeetod:
+        (Osa)jada jagatakse kaheks lühemaks osajadaks nii, et ükski element esimeses osas ei oleks suurem ühestki elemendist teises osas.
+         Siis võib kummagi osa sorteerida eraldi (nad on   sõltumatud). "Jaga ja valitse"
+        /**
+        * Sorteerida massiiv kiirmeetodil.
+        * @param massiiv sorteeritav massiiv.
+        * @param l vasakpoolne otspunkt.
+        * @param r parempoolne otspunkt.
+        */
+        static public void sort (Comparable[] massiiv, int l, int r) {
+            if (massiiv.length < 2) return;
+            int i = l; int j = r;
+            Comparable x = massiiv [(i+j) / 2];
+            do {
+                while (massiiv [i].compareTo (x) < 0) i++;
+                while (x.compareTo (massiiv [j]) < 0) j--;
+                if (i <= j) {
+                    Comparable tmp = massiiv [i];
+                    massiiv [i] = massiiv [j]; massiiv [j] = tmp;
+                    // selle koha peal on väljatrükk silumiseks: "veelahe" ja vahetatavad
+                    i++; j--;
+                }
+            } while (i < j);
+                if (l < j) sort (massiiv, l, j); // rekursioon
+                if (i < r) sort (massiiv, i, r); // rekursioon
+        } // sort() lopp
 
 5.Jaga ja valitse: ühildusmeetod (merge sort).
-"Jaga ja valitse": jagatakse kogu aeg pooleks (kuni pikkus < 2), pooled ühendatakse lineaarse keerukusega ühildamise abil, kasutatakse lisamälu mahuga O(n)
-
-
-
+    "Jaga ja valitse": jagatakse kogu aeg pooleks (kuni pikkus < 2), pooled ühendatakse lineaarse keerukusega ühildamise abil, kasutatakse lisamälu mahuga O(n)
 6.Lineaarse keerukusega järjestamismeetodid: kimbumeetod (bucket sort), positsioonimeetod (radix sort) ja  loendamismeetod (counting sort).
-
+    TODO!!
 7.Abstraktsed andmetüübid (ADT), staatilised ja dünaamilised andmestruktuurid. Ahel (list), ahelate liigid.
-
+    Abstraktsed andmetüübid
+        "Varajane" OOP. Eesmärk: peita realisatsiooni detailid, anda rakenduse programmeerijale probleemorienteeritud liides.
+        ADT - Abstract Data Type
+            1. Lubatud väärtuste hulk (väärtusvaru)
+            2. Lubatud operatsioonide hulk
+            3. (Notatsioon - tähistused väärtuste ja operatsioonide jaoks)
+            Näit. kompleksarvud, polünoomid, graafid, geomeetrilised kujundid, ...
+        OOP muutis niisuguse lähenemise kohustuslikuks.
+        Väärtusvaru järgi jagunemine:
+            1. lihttüübid, mille väärtustel ei ole sisemist struktuuri: arv, tõeväärtus, ...
+            2. struktuursed tüübid, mille väärtus koosneb komponentidest: massiiv, objekt (kirje), ...
+        Operatsioonid on OOP-s "kinnistatud" objekti juurde (kapseldus).
+            1. Kinnised operatsioonid: tulemus kuulub sama tüübi väärtusvarusse
+            2. mittekinnised operatsioonid: tulemus on mingit teist tüüpi
+            3. tüübiteisendused: tegelikud ja deklaratiivsed
+            Näit. kinnine operatsioon "summa" (mis iganes see ka poleks)
+        Imperatiivne lähenemine: m = summa (a, b) "funktsiooni summa parameetriteks on a ja b"
+        OOP lähenemine: m = a.summa (b) "objektile a saadetakse teade 'summa' parameetriga b"
+        Andmestruktuurid võib jagada:
+            1. staatilised: komponentide arv ja tüübid fikseeritud: näiteks kompleksarv
+            2. dünaamilised: väärtuse komponentide arv on muutuv, komponendid ise tavaliselt üht tüüpi: näiteks magasin, järjekord, graaf, ...
+        Andmestruktuuride korral on oluliseks küsimuseks juurdepääsu tagamine komponentidele ning struktuuri muutmine (vastavate operatsioonide ajaline keerukus).
+            "Võtmine" ja "lisamine".
 8.Magasin (stack). Avaldise pööratud poola kuju (RPN).
-
+    LIFO - last in first out
+    Magasini omadused:
+        1. dünaamiline struktuur (elementide arv on muutuv)
+        2. elemendid on sama tüüpi
+        3. elementide järjestus on oluline
+        4. juurdepääs on ainult viimasena lisatud elemendile (magasini tipp); "lisamine" lisab lõppu ja "võtmine" eemaldab lõpust
+        5. tavaliselt realiseeritavad operatsioonid: tühja magasini loomine, lisamine (push), võtmine (pop), alatäitumise (underflow) kontroll (et vältida tühjast magasinist võtmist),
+           mõne realisatsiooni korral ka ületäitumise (overflow) kontroll (kas on "ruumi" lisamiseks), tipu lugemine ilma eemaldamiseta (optim. kaalutlustel)
+    Keeles Java võib magasini realisatsiooni leida klassides java.util.Stack (baseerub vektoril) või java.util.LinkedList spetsialiseerides (baseerub topeltseotud ahelal).
+    Magasini kasutamise näited: avaldise väärtustamine, 'return stack', puu läbimine, ...
+    Avaldise postfikskuju ja selle interpreteerimine
+        "Tavaline" infikskuju: (5-1) * 7 + 6 / 3
+        Prefikskuju sulgudega: +( *( -( 5, 1), 7), /(6, 3))
+        Postfikskuju sulgudega: (((5, 1)-, 7)*, (6, 3)/ )+
+        Sulgudeta postfikskuju - nn. "pööratud poola kuju": 5 1 - 7 * 6 3 / + .
 9.Järjekord (queue), järjekordade eriliigid.
-
+    FIFO - First In First Out
+    Järjekorra omadused:
+        1. dünaamiline struktuur (elementide arv on muutuv)
+        2. elemendid on sama tüüpi
+        3. elementide järjestus on oluline
+        4. juurdepääs on ainult esimesena lisatud elemendile (front); "lisamine" lisab lõppu ja "võtmine" eemaldab algusest (järjekorra metafoor)
+        5. tavaliselt realiseeritavad operatsioonid: tühja järjekorra loomine, lisamine, võtmine, alatäitumise (underflow) kontroll (et vältida tühjast järjekorrast võtmist),
+           mõne realisatsiooni korral ka ületäitumise (overflow) kontroll (kas on "ruumi" lisamiseks), vahendid järjekorra läbivaatamiseks (näit. iteraatorid vms.)
+    Keeles Java võib järjekorra realisatsiooni luua klassi java.util.LinkedList spetsialiseerides (baseerub topeltseotud ahelal).
+    Näiteid järjekorra kasutamise kohta: ressursside jagamine (printer), tegevuste planeerimine, graafi läbimine
+    Eelistusjärjekord
+        Järjekord, milles on olulised elementide (võtmete) väärtused. Prioriteetidega järjekord. "Lisamine" on sisuliselt hulgateoreetiline lisamine ja "võtmine" on vähima (suurima)
+        võtmeväärtusega elemendi eemaldamine. Kui prioriteedid on staatilised (ei muutu elemendi järjekorras olemise ajal), siis saab "lisamise" teha pistemeetodi abil "Õigesse kohta".
+    Muutuvate eelistustega järjekord
+        Kui elemendi prioriteet võib elemendi järjekorras olemise ajal dünaamiliselt muutuda (niisugust järjekorda nim. muutuvate eelistustega järjekorraks),
+        siis tuleb "võtmine" realiseerida järjekorra läbivaatusena ("lisamine" on selle eest lihtne). Teine võimalus on kajastada iga prioriteedimuutust kohe järjekorras,
+        aga see ei pruugi olla hea lahendus (näiteks kui muutusi on palju, aga võtmisi vähe).
 10.Puu, puu kujutamine. Suluesitused.
-
+    Puu (programmeerimisalal tavaliselt järjestatud puu):
+        dünaamiline andmestruktuur
+        komponentideks nn. puu tipud: juurtipp e. juur, vahetipud, lehed (terminaalsed tipud)
+        peegeldab ranget hierarhiat: juurtipp on kõige kõrgema taseme "ülemus", kõigil ülejäänud tippudel on täpselt üks ülemus (kasutatakse ka "vanemad-lapsed-vennad" metafoori)
+        alluvateta tipud = puu lehed, kõik ülejäänud tipud on vahetipud
+        sama ülemuse alluvad - kolleegid, naabrid
+        järjestatud puu korral on oluline iga tipu alluvate (naabrite) omavaheline järjestus
+    Näide:  aritmeetilise avaldise puu
+        Infikskuju prioriteedisulgudega:  (5 - 1) * 7 + 6 / 3
+        Prefikskuju sulgudega:  + (* (- (5, 1), 7), / (6, 3))
+        Postfikskuju sulgudega:  (((5, 1)-, 7)*, (6, 3)/ )+
+        Pööratud poola kuju:  5 1 - 7 * 6 3 / +
 11.Puu läbimise viisid (põhialgoritmid).
-
+    Eesjärjestus (pre-order):
+        Töödelda juur
+        Töödelda juure alampuud järjestuses vasakult paremale
+    Lõppjärjestus (post-order, end-order):
+        Töödelda juure alampuud järjestuses vasakult paremale
+        Töödelda juur
+    Kahendpuu läbimine keskjärjestuses (in-order)
+        Töödelda vasak alampuu
+        Töödelda juur
+        Töödelda parem alampuu
+    [VT. TREENODE / home5]
 12.Graaf, graafiga seotud mõisted: orienteeritud ja orienteerimata graaf, multigraaf, lihtgraaf, sidusus, alamgraaf.
+    G = (V, E) - graaf
+        V - lõplik tippude hulk
+        E c V x V (tipupaaride hulga alamhulk)
+    Kui E elemente vaadeldakse kaheelemendiliste hulkadena (tippude järjekord paaris ei ole oluline), siis nimetatakse graafi orienteerimata graafiks ning hulka E graafi servade hulgaks.
+    Kui E elemente vaadeldakse järjestatud tipupaaridena, siis nimetatakse graafi orienteeritud graafiks (digraph) ning hulka E graafi kaarte hulgaks.
+    Graafiga seotud mõisteid
+        Kui hulka E vaadeldakse multihulgana (element võib hulgas esineda mitmes eksemplaris), siis nimetatakse graafi multigraafiks (kordsete servade/ kaartega graafiks).
+        Paari (v, v) hulgast E nim. silmuseks.
+        Tippe u, v hulgast V nim. serva e=(u, v) otstippudeks, samuti öeldakse, et tipud u ja v on intsidentsed servaga e (orienteerimata graafis u ja v on naabertipud).
+        Silmuste ja kordsete servadeta orienteerimata graafi nim. lihtgraafiks.
+        Graafi G = (V, 0) nim. nullgraafiks (servade hulk on tühi).
+        Lihtgraafi
+            G = (V, VxV {(v, v)| v kuulub hulka V})
+            nim. täisgraafiks (esinevad kõik erinevate tippude vahelised servad).
+    Tee tipust u tippu v on paarikaupa ühiste otstippudega kaarte jada:
+        (u, w0), (w0, w1), ... , (wn, v) kuuluvad hulka E .
+    Orienteerimata graafi nim. sidusaks, (orienteeritud graafi tugevalt sidusaks) kui leidub tee mistahes tipust mistahes teise tippu.
+    Orienteeritud graaf on nõrgalt sidus, kui kaarte suundade ärajätmisel saadav orienteerimata graaf on sidus.
+    Graafi G1 = (V1, E1) nim. graafi G = (V, E) alamgraafiks, kui V1 on hulga V alamhulk ja E1 on E ühisosa hulgaga V1xV1
+        (NB! mitte selle ühisosa alamhulk: alamhulga korral on tegemist nn. blokiga).
 
 13.Graafi kujutamine, graafiga seotud maatriksid, tehted graafidega.
 
