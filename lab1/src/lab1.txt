@@ -1,0 +1,61 @@
+1.Algoritmi omadused. Algoritmide asümptootiline analüüs: relatsioonid "suur-O", "väike-o", teeta, "suur-oomega" ja "väike-oomega"; nende definitsioonid ning  põhiomadused.
+
+2.Kahendotsimine (binary search).
+
+3.Paisksalvestus, paisktabel (hash table).
+
+4.Järjestamine: pistemeetod (insertion sort) ja kiirmeetod (quicksort).
+
+5.Jaga ja valitse: ühildusmeetod (merge sort).
+
+6.Lineaarse keerukusega järjestamismeetodid: kimbumeetod (bucket sort), positsioonimeetod (radix sort) ja  loendamismeetod (counting sort).
+
+7.Abstraktsed andmetüübid (ADT), staatilised ja dünaamilised andmestruktuurid. Ahel (list), ahelate liigid.
+
+8.Magasin (stack). Avaldise pööratud poola kuju (RPN).
+
+9.Järjekord (queue), järjekordade eriliigid.
+
+10.Puu, puu kujutamine. Suluesitused.
+
+11.Puu läbimise viisid (põhialgoritmid).
+
+12.Graaf, graafiga seotud mõisted: orienteeritud ja orienteerimata graaf, multigraaf, lihtgraaf, sidusus, alamgraaf.
+
+13.Graafi kujutamine, graafiga seotud maatriksid, tehted graafidega.
+
+14.Graafi läbimise algoritmid: laiuti (breadth first) ja sügavuti (depth first).
+
+15.Algoritmid graafidel: sidususkomponentide leidmine.
+
+16.Algoritmid graafidel: tippude topoloogiline järjestamine.
+
+17.Algoritmid graafidel: kauguste arvutamine kõigi tipupaaride vahel.
+
+18.Algoritmid graafidel: lühimate teede leidmine antud tipust.
+
+19.Algoritmid graafidel: toesepuu (spanning tree).
+
+20.Rekursioon, näide: Hanoi tornid. Rekursiooni eemaldamine, "sabarekursioon" (tail recursion).
+
+21.Ammendav otsing. Lippude paigutamise ülesanne (8 queens).
+
+22.Kahendpuu ja selle läbimine, kahendotsimise puu (binary search tree).
+
+23.AVL-puu, binomiaalpuu ja värvitud kahendpuu (red-black tree).
+
+24.Kahendkuhi (binary heap)  ja sorteerimine kuhjameetodil (heap sort).
+
+25.m-rajaline otsimispuu, B-puu.
+
+26.Sõnealgoritmid: Knuth-Morris-Pratt'i algoritm,  Rabin-Karp'i algoritm.
+
+27.Sõnealgoritmid: Boyer-Moore'i algoritm.
+
+28.Kodeerimine, kodeerimisskeemid, prefikskood. Shannon-Fano pakkimismeetod.
+
+29.Ahned (greedy) algoritmid. Pakkimine Huffmani puu abil.
+
+30.Dünaamiline kavandamine (dynamic programming). Pikima ühise osasõne leidmine.
+
+31.Nõrgima eeltingimuse kasutamine algorimi osalise korrektsuse tõestamiseks.
