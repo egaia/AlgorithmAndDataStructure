@@ -1,12 +1,138 @@
 1.Algoritmi omadused. Algoritmide asümptootiline analüüs: relatsioonid "suur-O", "väike-o", teeta, "suur-oomega" ja "väike-oomega"; nende definitsioonid ning  põhiomadused.
+    a) Algoritmi iseloomustamiseks kasutatakse järgmisi mõisteid:
+        * Korrektsus (algoritm lahendab "õiget" ülesannet, tulemus vastab spetsifikatsioonile).
+        * Määratletus (sammud on lõplikud ja üheselt määratud).
+        * Kirjelduse lõplikkus (algoritm on kirjeldatav lõpliku arvu sammudega).
+        * Peatuvus. Töö lõpetamine mistahes sisendi korral - kõikjal määratud algoritm. Osaline e. "poollahenduv" algoritm kas annab tulemuse või ei lõpeta tööd.
+        * Determinism (samade algandmete korral vastus sama, lahenduskäik on korratav) vs. mittedeterminism (näit. "tõeline" juhuarvude generaator).
+        * Universaalsus (lahendab probleemide klassi: sisend -> väljund ).
+        * Keerukus (efektiivsus, kas lõpetamise aeg ja/või mälumaht on praktilised).
 
+    b) Asümptootilised hinnangud, "suure O", "väikese o", "suure oomega", "väikese oomega" ja teeta-tähistused:
+    "f kasvab mitte kiiremini kui g" ( f big-Oh g ) - leiduvad konstant c>0 ja koht N nii, et iga n>N korral
+        |f(n)| < c|g(n)|
+            f ja g suhe on ülalt tõkestatud.
+
+    "f kasvab aeglasemalt kui g" ( f little-oh g ) - mistahes konstandi c>0 jaoks leidub koht N nii, et iga n>N korral
+        |f(n)| < c|g(n)|
+            f ja g suhe pole alt tõkestatud.
+    "f kasvab niisama kiiresti kui g" ( f big-Theta g ) - leiduvad konstandid b, c>0 ja koht N nii, et iga n>N korral
+        b|g(n)| < |f(n)| < c|g(n)|
+            f ja g suhe on nii ülalt kui ka alt tõkestatud.
+    "f kasvab mitte aeglasemalt kui g" ( f big-Omega g ) - "g kasvab mitte kiiremini kui f"
+        f ja g suhe on alt tõkestatud.
+    "f kasvab kiiremini kui g" ( f little-omega g ) - "g kasvab aeglasemalt kui f"
+        f ja g suhe pole ülalt tõkestatud.
 2.Kahendotsimine (binary search).
-
+    "Lõigu poolitamine" matemaatikas. On rakendatav kahel eeltingimusel:
+        1. vaadeldav struktuur on järjestatud
+        2. elemendid on indekseeritavad
+    O(log n)
+    /**
+    * Leida etteantud listist etteantud element kahendotsimise abil.
+    * @param a list.
+    * @param e otsitav element.
+    * @returns otsitava elemendi indeks või -1, kui elementi ei leidu.
+    */
+    static public int otsi (List a, Comparable e) {
+        int j = -1;
+        int l = 0; // vasakpoolne otspunkt
+        int r = a.size() - 1; // parempoolne otspunkt
+        while (l <= r) {
+            j = (l + r) / 2;
+            if (e.compareTo ((Comparable)a.get (j)) == 0)
+                return j;
+            if (e.compareTo ((Comparable)a.get (j)) > 0)
+                l = j+1; // vasak otspunkt nihkub paremale
+            else
+                r = j-1; // parem otspunkt nihkub vasakule
+        };
+        return -1;
+    } // otsi lopp
 3.Paisksalvestus, paisktabel (hash table).
+Hashing (paisksalvestus) - Elemendi asukoht massiivis leitakse rakendades võtmele hash funktsiooni.
+Mitme võtme sattumist samale kohale nimetatakse kokkupõrkeks. Kokkupõrke lahendamiseks on mitu meetodit
+    ? avatud adresseerimine (lingitud listiga)
+    ? rehash
+Hash otsingu keerukus - Halvimal juhul lineaarne otsing (O(n)) - Kõik elemendid on ühes lingitud listis.
+Parimal juhul konstantne otsing (O(1)) - Iga võti annab erineva hash väärtuse
+
+
 
 4.Järjestamine: pistemeetod (insertion sort) ja kiirmeetod (quicksort).
+Pistemeetod:
+Jada jagatakse "järjestatud osaks" (algselt tühi) ja "järjestamata osaks" (algselt kogu jada).
+Järjestatud osa pikkust suurendatakse järjekordse elemendi paigutamisega õigele kohale järjestatud osas.
+
+/**
+* Sorteerida pistemeetodil List, mille elemendid realiseerivad
+* liidest Comparable.
+* @param a sorteeritav list.
+*/
+static public void pisteSort (List a) {
+if (a.size() < 2) return;
+for (int i=1; i<a.size(); i++) {
+}
+Comparable b = (Comparable) a.remove (i);
+int j;
+for (j=0; j<i; j++) {
+if (b.compareTo ((Comparable)a.get (j)) < 0) break;
+}
+a.add (j, b); // pistame b kohale j
+}
+} // pisteSort() lopp
+
+/**
+* Sorteerime massiivi, mille elemendid realiseerivad
+* liidest Comparable.
+* @param a sorteeritav massiiv.
+*/
+static public void pisteSort (Comparable[] a) {
+if (a.length < 2) return;
+for (int i=1; i<a.length; i++) {
+Comparable b = a[i];
+int j;
+for (j=i-1; j>=0; j--) {
+if (a[j].compareTo (b) <= 0) break;
+a[j+1] = a[j]; // vabastame pistekoha
+}
+a[j+1] = b; // pistame b kohale
+}
+} // pisteSort() lopp
+
+Kiirmeetod:
+(Osa)jada jagatakse kaheks lühemaks osajadaks nii, et ükski element esimeses osas ei oleks suurem ühestki elemendist teises osas. Siis võib kummagi osa sorteerida eraldi (nad on sõltumatud). "Jaga ja valitse"
+
+/**
+* Sorteerida massiiv kiirmeetodil.
+* @param massiiv sorteeritav massiiv.
+* @param l vasakpoolne otspunkt.
+* @param r parempoolne otspunkt.
+*/
+static public void sort (Comparable[] massiiv, int l, int r) {
+if (massiiv.length < 2) return;
+int i = l; int j = r;
+Comparable x = massiiv [(i+j) / 2];
+do {
+while (massiiv [i].compareTo (x) < 0) i++;
+while (x.compareTo (massiiv [j]) < 0) j--;
+if (i <= j) {
+Comparable tmp = massiiv [i];
+massiiv [i] = massiiv [j]; massiiv [j] = tmp;
+// selle koha peal on väljatrükk silumiseks: "veelahe" ja vahetatavad
+i++; j--;
+}
+} while (i < j);
+if (l < j) sort (massiiv, l, j); // rekursioon
+if (i < r) sort (massiiv, i, r); // rekursioon
+} // sort() lopp
+
+
 
 5.Jaga ja valitse: ühildusmeetod (merge sort).
+"Jaga ja valitse": jagatakse kogu aeg pooleks (kuni pikkus < 2), pooled ühendatakse lineaarse keerukusega ühildamise abil, kasutatakse lisamälu mahuga O(n)
+
+
 
 6.Lineaarse keerukusega järjestamismeetodid: kimbumeetod (bucket sort), positsioonimeetod (radix sort) ja  loendamismeetod (counting sort).
 
